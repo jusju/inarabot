@@ -25,7 +25,13 @@ public class ChatBot extends TelegramLongPollingBot {
 	public void onUpdateReceived(Update update) {
 		// We check if the update has a message and the message has text
 		if (update.hasMessage() && update.getMessage().hasText()) {
-			String sanotaanTakaisin = sanoTakaisin(update.getMessage().getText());
+			String kokoteksti = update.getMessage().getText();
+			String[] solut = kokoteksti.split(" ");
+			String viestinAlku = solut[0];
+			if(solut.length == 2) {
+				System.out.println("JUKKA" + solut[1]);	
+			}
+			String sanotaanTakaisin = sanoTakaisin(viestinAlku);
 			SendMessage message = new SendMessage() // Create a SendMessage
 													// object with mandatory
 													// fields
@@ -55,10 +61,19 @@ public class ChatBot extends TelegramLongPollingBot {
 		}
 		else if (botilleSanottua.equals("/foodmenu")) {
 			sanotaanTakaisin = etsiRuokalista();
+		} 
+		else if (botilleSanottua.equals("/jukkapaid")) {
+			sanotaanTakaisin = etsiJukanMaksut();
 		}
 		
 		return sanotaanTakaisin;
 	}
+	
+	public String etsiJukanMaksut() {
+		String sanotaanTakaisin = "Jukka has paid a lot";
+		return sanotaanTakaisin;
+	}
+	
 
 	public String etsiRuokalista() {
 		LocalDate tanaan = LocalDate.now();

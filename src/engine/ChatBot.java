@@ -26,12 +26,17 @@ public class ChatBot extends TelegramLongPollingBot {
 		// We check if the update has a message and the message has text
 		if (update.hasMessage() && update.getMessage().hasText()) {
 			String kokoteksti = update.getMessage().getText();
-			String[] solut = kokoteksti.split(" ");
-			String viestinAlku = solut[0];
-			if(solut.length == 2) {
-				System.out.println("JUKKA" + solut[1]);	
+			String sanotaanTakaisin = "";
+			if (kokoteksti.contains(" ")) {
+				String[] solut = kokoteksti.split(" ");
+				String viestinAlku = solut[0];
+				if (solut.length == 2) {
+					System.out.println("JUKKA " + solut[1]);
+				}
+				sanotaanTakaisin = sanoTakaisin(viestinAlku);
+			} else {
+				sanotaanTakaisin = kokoteksti;
 			}
-			String sanotaanTakaisin = sanoTakaisin(viestinAlku);
 			SendMessage message = new SendMessage() // Create a SendMessage
 													// object with mandatory
 													// fields
@@ -49,31 +54,25 @@ public class ChatBot extends TelegramLongPollingBot {
 		String sanotaanTakaisin = "";
 		if (botilleSanottua.equals("/i love you")) {
 			sanotaanTakaisin = "I love you too.";
-		}
-		else if (botilleSanottua.equals("/who will fetch pauline today?")) {
+		} else if (botilleSanottua.equals("/who will fetch pauline today?")) {
 			sanotaanTakaisin = "I can tell you that when that feature is implemented.";
-		}
-		else if (botilleSanottua.equals("/when did jukka pay?")) {
+		} else if (botilleSanottua.equals("/when did jukka pay?")) {
 			sanotaanTakaisin = "I can tell you that when that feature is implemented.";
-		}
-		else if (botilleSanottua.equals("/weather")) {
+		} else if (botilleSanottua.equals("/weather")) {
 			sanotaanTakaisin = etsiSaa();
-		}
-		else if (botilleSanottua.equals("/foodmenu")) {
+		} else if (botilleSanottua.equals("/foodmenu")) {
 			sanotaanTakaisin = etsiRuokalista();
-		} 
-		else if (botilleSanottua.equals("/jukkapaid")) {
+		} else if (botilleSanottua.equals("/jukkapaid")) {
 			sanotaanTakaisin = etsiJukanMaksut();
 		}
-		
+
 		return sanotaanTakaisin;
 	}
-	
+
 	public String etsiJukanMaksut() {
 		String sanotaanTakaisin = "Jukka has paid a lot";
 		return sanotaanTakaisin;
 	}
-	
 
 	public String etsiRuokalista() {
 		LocalDate tanaan = LocalDate.now();
@@ -105,46 +104,45 @@ public class ChatBot extends TelegramLongPollingBot {
 
 				JSONObject result = (JSONObject) parse.parse(inline);
 				JSONArray menus = (JSONArray) result.get("LunchMenus");
-		        Iterator i = menus.iterator();
+				Iterator i = menus.iterator();
 
-		        System.out.println("TAPANI: ");
+				System.out.println("TAPANI: ");
 
-		        while (i.hasNext()) {
-		            JSONObject weekinfo = (JSONObject) i.next();
-		            String dayOfWeek = (String)weekinfo.get("DayOfWeek");
-		            System.out.println(dayOfWeek);
-		            String date = (String)weekinfo.get("Date");
-		            System.out.println(date);
-		            JSONArray linjastot = (JSONArray)weekinfo.get("SetMenus");
-		            Iterator j = linjastot.iterator();
-		            while (j.hasNext()) {
-		            	JSONObject mealInfo = (JSONObject) j.next();
-		            	JSONArray setmenus = (JSONArray)mealInfo.get("SetMenus");
-		         
-			            JSONArray meals = (JSONArray)mealInfo.get("Meals");
-			            Iterator k = meals.iterator();
-			            while(k.hasNext()) {
-				            JSONObject dayInfo = (JSONObject) k.next();
-				            String name = (String)dayInfo.get("Name");
-				            System.out.println(name);
-				           
-				            if(date.equals(paivaTanaan)) {
-				            	ruokainfo = ruokainfo + " " + name;
-				            }
-			            }
-		            }
-		        }
-				
-				
+				while (i.hasNext()) {
+					JSONObject weekinfo = (JSONObject) i.next();
+					String dayOfWeek = (String) weekinfo.get("DayOfWeek");
+					System.out.println(dayOfWeek);
+					String date = (String) weekinfo.get("Date");
+					System.out.println(date);
+					JSONArray linjastot = (JSONArray) weekinfo.get("SetMenus");
+					Iterator j = linjastot.iterator();
+					while (j.hasNext()) {
+						JSONObject mealInfo = (JSONObject) j.next();
+						JSONArray setmenus = (JSONArray) mealInfo.get("SetMenus");
+
+						JSONArray meals = (JSONArray) mealInfo.get("Meals");
+						Iterator k = meals.iterator();
+						while (k.hasNext()) {
+							JSONObject dayInfo = (JSONObject) k.next();
+							String name = (String) dayInfo.get("Name");
+							System.out.println(name);
+
+							if (date.equals(paivaTanaan)) {
+								ruokainfo = ruokainfo + " " + name;
+							}
+						}
+					}
+				}
+
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-				
+
 		return ruokainfo;
 	}
-	
+
 	public String etsiSaa() {
 		String inline = "";
 		try {
@@ -173,7 +171,7 @@ public class ChatBot extends TelegramLongPollingBot {
 				JSONObject wind = (JSONObject) result.get("wind");
 				double speed = (Double) wind.get("speed");
 				System.out.println("wind speed");
-				
+
 				LocalDate tanaan = LocalDate.now();
 				int vuosi = tanaan.getYear();
 				int kuukausi = tanaan.getMonthValue();
@@ -186,8 +184,8 @@ public class ChatBot extends TelegramLongPollingBot {
 				String aika = dtf.format(now);
 
 				System.out.println("JUKKA " + temp);
-				inline = "Outside at Helsinki it is now " + temp + "C. Wind speed is: " + speed + "m/s. Today is " + viikonpaiva + " " +
-						paiva + "." + kuukausi + "." + vuosi + " at " + aika + ".";
+				inline = "Outside at Helsinki it is now " + temp + "C. Wind speed is: " + speed + "m/s. Today is "
+						+ viikonpaiva + " " + paiva + "." + kuukausi + "." + vuosi + " at " + aika + ".";
 			}
 
 		} catch (Exception e) {

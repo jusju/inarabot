@@ -167,11 +167,31 @@ public class ChatBot extends TelegramLongPollingBot {
 				JSONObject result = (JSONObject) parse.parse(inline);
 				JSONObject main = (JSONObject) result.get("main");
 				double temp = (Double) main.get("temp");
+				conn.disconnect();
+				url = new URL(
+						"http://api.openweathermap.org/data/2.5/weather?q=Nurmijarvi&APPID=a8720cf3a65bd981b2fecc6381cd729e&units=metric");
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.connect();
+				
+				sc = new Scanner(url.openStream());
+				inline = "";
+				while (sc.hasNext()) {
+					inline += sc.nextLine();
+				}
+				sc.close();
+				System.out.println("\nJSON data in string format");
+				System.out.println(inline);
+				parse = new JSONParser();
+
+				result = (JSONObject) parse.parse(inline);
+				main = (JSONObject) result.get("main");
 
 				JSONObject wind = (JSONObject) result.get("wind");
 				double speed = (Double) wind.get("speed");
 				System.out.println("wind speed");
-
+				conn.disconnect();
+				
 				LocalDate tanaan = LocalDate.now();
 				int vuosi = tanaan.getYear();
 				int kuukausi = tanaan.getMonthValue();

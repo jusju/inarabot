@@ -35,7 +35,7 @@ public class ChatBot extends TelegramLongPollingBot {
 				}
 				sanotaanTakaisin = sanoTakaisin(viestinAlku);
 			} else {
-				sanotaanTakaisin = kokoteksti;
+				sanotaanTakaisin = sanoTakaisin(kokoteksti);
 			}
 			SendMessage message = new SendMessage() // Create a SendMessage
 													// object with mandatory

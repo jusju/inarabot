@@ -33,7 +33,7 @@ public class ChatBot extends TelegramLongPollingBot {
 				if (solut.length == 2) {
 					System.out.println("JUKKA " + solut[1]);
 				}
-				sanotaanTakaisin = sanoTakaisin(viestinAlku);
+				sanotaanTakaisin = sanoTakaisin(kokoteksti);
 			} else {
 				sanotaanTakaisin = sanoTakaisin(kokoteksti);
 			}
@@ -52,8 +52,8 @@ public class ChatBot extends TelegramLongPollingBot {
 	public String sanoTakaisin(String botilleSanottua) {
 		System.out.println(botilleSanottua);
 		String sanotaanTakaisin = "";
-		if (botilleSanottua.equals("/i love you")) {
-			sanotaanTakaisin = "I love you too.";
+		if (botilleSanottua.equals("/onko ohjelmointi kivaa?")) {
+			sanotaanTakaisin = "Kyllä. Siitä saa kicksejä!";
 		} else if (botilleSanottua.equals("/who will fetch pauline today?")) {
 			sanotaanTakaisin = "I can tell you that when that feature is implemented.";
 		} else if (botilleSanottua.equals("/when did jukka pay?")) {

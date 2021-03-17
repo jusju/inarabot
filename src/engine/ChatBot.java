@@ -62,7 +62,7 @@ public class ChatBot extends TelegramLongPollingBot {
 			sanotaanTakaisin = etsiSaa();
 		} else if (botilleSanottua.equals("/foodmenu")) {
 			sanotaanTakaisin = etsiRuokalista();
-		} else if (botilleSanottua.equals("/jukkapaid")) {
+		} else if (botilleSanottua.equals("/time")) {
 			sanotaanTakaisin = etsiJukanMaksut();
 		}
 
@@ -70,8 +70,12 @@ public class ChatBot extends TelegramLongPollingBot {
 	}
 
 	public String etsiJukanMaksut() {
-		String sanotaanTakaisin = "Jukka has paid a lot";
-		return sanotaanTakaisin;
+		Kello kello = new SuomiKello(new SysteemiKelloLahde());
+		String paluu = "";
+		paluu = paluu + kello.getPvm() + " ";
+		paluu = paluu + kello.getAika();
+		
+		return paluu;
 	}
 
 	public String etsiRuokalista() {
